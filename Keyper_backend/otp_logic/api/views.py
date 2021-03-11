@@ -2,7 +2,7 @@ from rest_framework.decorators import api_view,permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 import uuid
-
+from datetime import datetime
 from account_model.models import Account
 from otp_logic.models import OTP,SharedKey
 from .serializers import OTPSerializer
@@ -57,9 +57,21 @@ def create_share_key(request):
   else:
     return Response(status=status.HTTP_401_UNAUTHORIZED)
 
-@api_view(['GET',])
-def share_otp_key(request):
-    return Response()
+
+
+# @api_view(['POST',])
+# def check_for_valid(request):
+#   if(request.auth):
+#       shared_key=request.data['unique_to_check']
+#       key_obj=SharedKey.objects.filter(unique_shared_key=shared_key)
+#       print(key_obj.first().time_of_creation)
+#       print(datetime.now())
+#       print(key_obj.first().time_of_creation>=datetime.now())
+#       return Response(status=status.HTTP_200_OK)
+
+#     #check if valid
+      
+
 
 
 

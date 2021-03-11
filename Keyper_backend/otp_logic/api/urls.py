@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import get_user_key,generate_user_key,create_share_key
+from .views import get_user_key,generate_user_key,create_share_key,check_for_valid
 
 
 app_name="key"
@@ -8,4 +8,5 @@ urlpatterns=[
     path("key/",get_user_key,name="user_key"),
     path("generate_key/",generate_user_key,name="generate_key"),
     path("create_share_key/",create_share_key,name="sharekey"),
+    path("check_for_valid/",check_for_valid,name="validity"),
 ]
