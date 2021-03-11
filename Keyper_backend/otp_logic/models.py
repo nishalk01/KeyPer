@@ -15,6 +15,7 @@ class SharedKey(models.Model):
     time_of_creation=models.DateTimeField(auto_now=True)
     to=models.ForeignKey(Account,on_delete=models.CASCADE,related_name="to_user")
     unique_shared_key=models.UUIDField(primary_key=True,default=uuid.uuid4)
+    valid=models.BooleanField(default=True)
     
 
     def __str__(self):

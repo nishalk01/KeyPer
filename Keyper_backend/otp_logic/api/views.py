@@ -4,7 +4,7 @@ from rest_framework import status
 import uuid
 
 from account_model.models import Account
-from otp_logic.models import OTP
+from otp_logic.models import OTP,SharedKey
 from .serializers import OTPSerializer
 
 
@@ -35,6 +35,27 @@ def get_user_key(request):
     else:
        return Response(status=status.HTTP_401_UNAUTHORIZED)
 
+
+
+@api_view(['POST',])
+def create_share_key(request):
+  usr_id=request.user.id
+  if(request.auth):
+    try:
+      to_user=request.data["to_user"]
+      account_obj_to_usr=Account.objects.get(email=to_user)
+      account_obj_from_usr=Account.objects.get(id=usr_id)
+      SharedKey_filter=SharedKey.objects.filter(from_user=account_obj_from_usr,to=account_obj_to_usr)
+      if(SharedKey_filter.exists()):
+        SharedKey_filter.update(unique_shared_key=uuid.uuid4())
+      else:
+        SharedKey.objects.create(from_user=account_obj_from_usr,to=account_obj_to_usr)
+    except Exception as E:
+      print(E)
+      return Response(status=status.HTTP_400_BAD_REQUEST)
+    return Response(status=status.HTTP_200_OK)
+  else:
+    return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 @api_view(['GET',])
 def share_otp_key(request):
