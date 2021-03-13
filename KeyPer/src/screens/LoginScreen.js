@@ -28,6 +28,7 @@ const LoginScreen = ({ navigation }) => {
      setLoading(false);
      setError(false);
      //TODO add navigate to home here
+     navigation.navigate('MainApp', { screen: 'Home' });
    })
    .catch(err=>{
      setLoading(false)

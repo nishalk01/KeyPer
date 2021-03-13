@@ -6,10 +6,21 @@ from datetime import datetime
 from account_model.models import Account
 from otp_logic.models import OTP,SharedKey
 from .serializers import OTPSerializer
+# import pytz
+from django.utils import timezone,timesince
+from django.core.exceptions import ObjectDoesNotExist
 
 
-    
 
+# utc=pytz.UTC
+
+from django.utils.timezone import utc
+
+def get_time_diff(time_created):
+        now = datetime.utcnow().replace(tzinfo=utc)
+        timediff = now - time_created
+        return timediff.total_seconds()
+  
 
 @api_view(['GET',])
 def generate_user_key(request):
@@ -36,6 +47,19 @@ def get_user_key(request):
        return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 
+@api_view(['GET',])
+def delete_user_key(request):
+  if(request.auth):
+   try:
+    otp_obj=OTP.objects.get(owner=request.user.id)
+    otp_obj.delete()
+    return Response(status=status.HTTP_200_OK)
+   except ObjectDoesNotExist:
+     return Response(status=status.HTTP_404_NOT_FOUND)
+  else:
+    return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+
 
 @api_view(['POST',])
 def create_share_key(request):
@@ -59,19 +83,40 @@ def create_share_key(request):
 
 
 
-# @api_view(['POST',])
-# def check_for_valid(request):
-#   if(request.auth):
-#       shared_key=request.data['unique_to_check']
-#       key_obj=SharedKey.objects.filter(unique_shared_key=shared_key)
-#       print(key_obj.first().time_of_creation)
-#       print(datetime.now())
-#       print(key_obj.first().time_of_creation>=datetime.now())
-#       return Response(status=status.HTTP_200_OK)
+@api_view(['POST',])
+def check_for_valid(request):
+  if(request.auth):
+      shared_key=request.data['unique_to_check']
+      key_obj=SharedKey.objects.filter(unique_shared_key=shared_key)
+      first_key=key_obj.first()
+      time_of=first_key.time_of_creation
+      valid=first_key.valid
+      expiration_time=first_key.time_till_expiration
+      if(get_time_diff(time_of)//60<=expiration_time and valid):#in minutes
+        data_obj={"data":"do something"}
+        return  Response(data_obj)
+      else:
+        key_obj.update(valid=False)
+        data_obj={"data":"deleted"}
+        return Response(data_obj)
 
-#     #check if valid
-      
 
+      # return Response(status=status.HTTP_200_OK)
+
+    #check if valid
+
+
+@api_view(['POST'])    
+def make_shared_key_invalid(request):
+  if(request.auth):
+    shared_key=request.data['unique_to_check']
+    shared_key=SharedKey.objects.filter(unique_shared_key=shared_key)
+    shared_key.update(valid=False)
+    return Response(status=status.HTTP_200_OK)
+
+
+
+  
 
 
 

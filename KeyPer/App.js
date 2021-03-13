@@ -51,8 +51,9 @@ const App=()=> {
     if(AsyncStorage.getItem('auth_token')){
       navigate('MainApp',{screen:"Home"});
     }
-
-
+   else{
+     navigate("Login")
+   }
  
 }, [])
 
@@ -86,8 +87,8 @@ const MainApp=()=>{
 
   return (
     <PaperProvider  theme={CombinedDefaultTheme}>
-    <NavigationContainer ref={navigationRef} >
-       <Stack.Navigator >
+    <NavigationContainer ref={navigationRef} > 
+       <Stack.Navigator initialRouteName="Login">
        <Stack.Screen name="MainApp" options={{ headerShown:false }} component={MainApp}/>
       <Stack.Screen name="Login"  options={{ headerShown:false}} component={LoginScreen}/>
       <Stack.Screen name="Register" options={{ headerShown:false }} component={RegisterScreen}/>

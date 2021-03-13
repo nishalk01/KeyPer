@@ -18,7 +18,14 @@ def check_for_valid():
     url=url_+"check_for_valid/"
     myobj={"unique_to_check":"22f1a696-707d-44a6-8fff-da096423d675"}
     r=requests.post(url,headers=headers,data=myobj)
-    # print(r.json())
+    print(r.json())
     print(r)
 
+def make_shared_key_invalid():
+    url=url_+"make_shared_key_invalid/"
+    myobj={"unique_to_check":"22f1a696-707d-44a6-8fff-da096423d675"}
+    r=requests.post(url,data=myobj,headers=headers)
+    print(r)
+    
+make_shared_key_invalid()
 check_for_valid()
