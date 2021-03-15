@@ -1,8 +1,7 @@
 import React,{useEffect} from 'react';
-import {View} from 'react-native'
-
+import {View} from 'react-native';
 import { NavigationContainer,
-  DefaultTheme as NavigationDefaultTheme} from '@react-navigation/native'
+  DefaultTheme as NavigationDefaultTheme} from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
@@ -15,7 +14,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Provider as PaperProvider ,
   DefaultTheme as PaperDefaultTheme} from 'react-native-paper';
 
-  import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 
 
@@ -26,6 +24,7 @@ import RegisterScreen from './src/screens/RegisterScreen';
 import HomePage from './src/screens/HomePage';
 import AppBar from './src/components/AppBar';
 import Profile from './src/screens/Profile';
+import  SharedKeyPage from "./src/screens/SharedKeyPage";
 
 import { navigationRef,navigate } from './src/RootNavigation';
 
@@ -93,6 +92,7 @@ const MainApp=()=>{
       <Stack.Screen name="Login"  options={{ headerShown:false}} component={LoginScreen}/>
       <Stack.Screen name="Register" options={{ headerShown:false }} component={RegisterScreen}/>
       <Stack.Screen name="ForgotPassword" options={{ headerShown:false }} component={ForgotPasswordScreen}/>
+      <Stack.Screen name="SharedKey" options={{ headerShown:false }} component={SharedKeyPage}/>
       </Stack.Navigator>
     </NavigationContainer>
     </PaperProvider>

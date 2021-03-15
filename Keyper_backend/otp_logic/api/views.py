@@ -5,7 +5,7 @@ import uuid
 from datetime import datetime
 from account_model.models import Account
 from otp_logic.models import OTP,SharedKey
-from .serializers import OTPSerializer
+from .serializers import OTPSerializer,SharedKeySerializer
 # import pytz
 from django.utils import timezone,timesince
 from django.core.exceptions import ObjectDoesNotExist
@@ -114,8 +114,16 @@ def make_shared_key_invalid(request):
     shared_key.update(valid=False)
     return Response(status=status.HTTP_200_OK)
 
-
-
+@api_view(['GET'])
+# TODO check to see if its valid
+def get_valid_sharekey(request):
+  print(request.auth)
+  if(request.auth):
+    SharedKey_list=SharedKey.objects.filter(from_user=request.user.id,valid=True)
+    serializer=SharedKeySerializer(SharedKey_list,many=True)
+    return Response(serializer.data)
+  else:
+    return Response(status=status.HTTP_401_UNAUTHORIZED)
   
 
 

@@ -6,9 +6,15 @@ platform :ios, '10.0'
 target 'KeyPer' do
   config = use_native_modules!
 
-  use_react_native!(:path => config["reactNativePath"])
+  use_react_native!(
+    :path => config[:reactNativePath],
+    # to enable hermes on iOS, change `false` to `true` and then install pods
+    :hermes_enabled => false
+  )
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
+  pod 'react-native-viewpager', :path => '../node_modules/@react-native-community/viewpager'
 
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-async-storage/async-storage'
 
@@ -20,18 +26,10 @@ target 'KeyPer' do
   # Enables Flipper.
   #
   # Note that if you have use_frameworks! enabled, Flipper will not work and
-  # you should disable these next few lines.
-  use_flipper!
+  # you should disable the next line.
+  use_flipper!()
+
   post_install do |installer|
-    flipper_post_install(installer)
-  end
-end
-
-target 'KeyPer-tvOS' do
-  # Pods for KeyPer-tvOS
-
-  target 'KeyPer-tvOSTests' do
-    inherit! :search_paths
-    # Pods for testing
+    react_native_post_install(installer)
   end
 end

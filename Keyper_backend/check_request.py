@@ -2,7 +2,7 @@ import requests
 
 
 headers = {'Authorization': 'Token 921866a4e16365c99ed5a4ab34a9cc64967de361'}
-url_="http://127.0.0.1:8000/api/"
+url_="http://192.168.0.108:8000/api/"
 def get_user_key():
     url = url_+'key/'
     r = requests.get(url, headers=headers)
@@ -27,5 +27,11 @@ def make_shared_key_invalid():
     r=requests.post(url,data=myobj,headers=headers)
     print(r)
     
-make_shared_key_invalid()
-check_for_valid()
+
+
+def get_shared_keys():
+    url=url_+"get_sharekeys/"
+    r=requests.get(url,headers=headers)
+    print(r.json())
+
+get_shared_keys()

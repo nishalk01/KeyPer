@@ -7,7 +7,7 @@ import { Button, Divider,Card, Title, Paragraph,Provider,Portal,Modal,TextInput,
 
 
 
-function HomePage() {
+function HomePage({ navigation }) {
   const [visible, setVisible] = useState(false);
   const [email,setEmail]=useState(null);
 
@@ -112,13 +112,12 @@ function HomePage() {
       </Card.Content>
     </Card>
     <Divider style={{marginBottom:"5%"}}/>
-    <TouchableRipple
-      onPress={()=>{console.log("hell no")}}
-      rippleColor="rgba(1, 1, 0, 1)"
-      >
+    
     <Card >
-  
- 
+    <TouchableRipple
+      onPress={()=>{navigation.navigate("SharedKey")}}
+      rippleColor="rgba(1, 1, 0, 0.32)"
+      >
       <Card.Content >
         <Title style={styles.cardCenter} >CREATE A SHARE KEY{'\n'}</Title>
         <Paragraph >Create a Share key that could shared with anyone with time limit{"\n"}</Paragraph>
@@ -129,8 +128,9 @@ function HomePage() {
             delete share key
           </Button> */}
       </Card.Content>
+      </TouchableRipple>
     </Card>
-    </TouchableRipple>
+    
      </SafeAreaView>
      </Provider>
     )
@@ -141,7 +141,7 @@ function HomePage() {
 
 
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
     container: {
       flex: 1,
     },
