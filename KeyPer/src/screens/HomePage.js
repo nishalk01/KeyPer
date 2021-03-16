@@ -1,15 +1,14 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import React,{useState} from 'react';
-import { StyleSheet,SafeAreaView, Alert } from 'react-native';
+import { StyleSheet, Alert,Text,View } from 'react-native';
 import {baseURL} from '../axios_inst';
 import { Button, Divider,Card, Title, Paragraph,Provider,Portal,Modal,TextInput,TouchableRipple } from 'react-native-paper';
-
-
-
+import NumericInput from 'react-native-numeric-input'
 function HomePage({ navigation }) {
   const [visible, setVisible] = useState(false);
   const [email,setEmail]=useState(null);
+  const [timeLimit, setTimeLimit] = useState(null);
 
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
@@ -42,7 +41,8 @@ function HomePage({ navigation }) {
     if(email){
       AsyncStorage.getItem("auth_token").then(auth_token=>{
         axios.post(baseURL+"api/create_share_key/",{
-         "to_user" :String(email)
+         "to_user" :String(email),
+         "time_limit":timeLimit
         },{
           headers: {
             'Authorization': `token ${auth_token}`
@@ -84,7 +84,7 @@ function HomePage({ navigation }) {
    
     return (
       <Provider>
-     <SafeAreaView style={styles.container}> 
+     <View style={styles.container}> 
 
 
       <Portal>
@@ -94,7 +94,23 @@ function HomePage({ navigation }) {
          mode="outlined"
          onChangeText={text => setEmail(text)}>
          </TextInput>
-        <Button style={styles.cardCenter} onPress={CreateShareKey}>Done</Button>
+         <NumericInput 
+            value={timeLimit} 
+            minValue={5}
+            maxValue={60}
+            onChange={value => setTimeLimit(value)} 
+            onLimitReached={(isMax,msg) => console.log(isMax,msg)}
+            totalWidth={100} 
+            totalHeight={50} 
+            iconSize={10}
+            step={15}
+            valueType='real'
+             
+            textColor='#B0228C' 
+            iconStyle={{ color: 'white' }} 
+            rightButtonBackgroundColor='#EA3788' 
+            leftButtonBackgroundColor='#E56B70'/>
+        <Button style={styles.cardCenter} onPress={CreateShareKey}>Doe</Button>
         </Modal>
       </Portal>
     
@@ -131,7 +147,7 @@ function HomePage({ navigation }) {
       </TouchableRipple>
     </Card>
     
-     </SafeAreaView>
+     </View>
      </Provider>
     )
 }

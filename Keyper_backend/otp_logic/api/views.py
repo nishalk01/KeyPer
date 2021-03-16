@@ -6,13 +6,9 @@ from datetime import datetime
 from account_model.models import Account
 from otp_logic.models import OTP,SharedKey
 from .serializers import OTPSerializer,SharedKeySerializer
-# import pytz
 from django.utils import timezone,timesince
 from django.core.exceptions import ObjectDoesNotExist
 
-
-
-# utc=pytz.UTC
 
 from django.utils.timezone import utc
 
@@ -67,13 +63,15 @@ def create_share_key(request):
   if(request.auth):
     try:
       to_user=request.data["to_user"]
+      time_limit=request.data["time_limit"]
+      print(time_limit)
       account_obj_to_usr=Account.objects.get(email=to_user)
       account_obj_from_usr=Account.objects.get(id=usr_id)
       SharedKey_filter=SharedKey.objects.filter(from_user=account_obj_from_usr,to=account_obj_to_usr)
       if(SharedKey_filter.exists()):
-        SharedKey_filter.update(unique_shared_key=uuid.uuid4())
+        SharedKey_filter.update(unique_shared_key=uuid.uuid4(),time_till_expiration=int(time_limit))
       else:
-        SharedKey.objects.create(from_user=account_obj_from_usr,to=account_obj_to_usr)
+        SharedKey.objects.create(from_user=account_obj_from_usr,to=account_obj_to_usr,time_till_expiration=int(time_limit))
     except Exception as E:
       print(E)
       return Response(status=status.HTTP_400_BAD_REQUEST)

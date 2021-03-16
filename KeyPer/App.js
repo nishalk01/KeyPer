@@ -47,13 +47,14 @@ const CombinedDefaultTheme = {
 
 const App=()=> {
   useEffect(() => {
-    if(AsyncStorage.getItem('auth_token')){
-      navigate('MainApp',{screen:"Home"});
-    }
-   else{
-     navigate("Login")
-   }
- 
+    AsyncStorage.getItem("auth_token").then(auth_token=>{
+      if(auth_token!=null){
+        navigate('MainApp',{screen:"Home"});
+      }
+      else{
+        navigate("Login")
+      }
+    })
 }, [])
 
 const MainApp=()=>{

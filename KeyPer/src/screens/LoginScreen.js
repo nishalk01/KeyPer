@@ -5,8 +5,9 @@ import Logo from '../components/Logo';
 import Button from '../components/Button';
 import TextInput from '../components/TextInput';
 import { theme } from '../core/theme';
-import {axiosInstance} from '../axios_inst';
+import { baseURL } from '../axios_inst';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 
 const LoginScreen = ({ navigation }) => {
@@ -17,7 +18,7 @@ const LoginScreen = ({ navigation }) => {
 
   const handleSubmit=(e)=>{
     setLoading(true);
-   axiosInstance.post("dj-rest-auth/login/",{
+   axios.post(baseURL+"dj-rest-auth/login/",{
      "email":email,
      "password":password
    })
