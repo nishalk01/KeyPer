@@ -34,4 +34,10 @@ def get_shared_keys():
     r=requests.get(url,headers=headers)
     print(r.json())
 
+def update_time_limit():
+    url=url_+"update_sharekey_time/"
+    my_obj={"unique_sharekey":"336ede7c-9283-4bac-b329-f05a49fedcba","time_limit":"100"}
+    r=requests.post(url,headers=headers,data=my_obj)
+    print(r)
+
 get_shared_keys()

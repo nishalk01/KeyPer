@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import get_user_key,generate_user_key,create_share_key,check_for_valid,make_shared_key_invalid,delete_user_key,get_valid_sharekey
+from .views import get_user_key,generate_user_key,create_share_key,check_for_valid,make_shared_key_invalid,delete_user_key,get_valid_sharekey_list,update_shareKey_timelimit
 
 
 app_name="key"
@@ -11,5 +11,6 @@ urlpatterns=[
     path("check_for_valid/",check_for_valid,name="validity"),
     path("make_shared_key_invalid/",make_shared_key_invalid,name="make_invalid"),
     path("delete_userkey/",delete_user_key,name="delete_userkey"),
-    path("get_sharekeys/",get_valid_sharekey,name="all_sharekey"),
+    path("get_sharekeys/",get_valid_sharekey_list,name="all_sharekey"),
+    path("update_sharekey_time/",update_shareKey_timelimit,name="timelimit_update"),
 ]

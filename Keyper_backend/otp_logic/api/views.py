@@ -112,18 +112,41 @@ def make_shared_key_invalid(request):
     shared_key.update(valid=False)
     return Response(status=status.HTTP_200_OK)
 
+
 @api_view(['GET'])
 # TODO check to see if its valid
-def get_valid_sharekey(request):
+def get_valid_sharekey_list(request):
   print(request.auth)
   if(request.auth):
     SharedKey_list=SharedKey.objects.filter(from_user=request.user.id,valid=True)
-    serializer=SharedKeySerializer(SharedKey_list,many=True)
+    for sharekey in SharedKey_list:
+      time_diff=get_time_diff(sharekey.time_of_creation)
+      if(time_diff//60>=sharekey.time_till_expiration):
+         SharedKey_obj=SharedKey.objects.filter(from_user=request.user,valid=True,unique_shared_key=sharekey.unique_shared_key)
+         SharedKey_obj.update(valid=False)
+    after_SharedKey_list=SharedKey.objects.filter(from_user=request.user.id,valid=True)
+    serializer=SharedKeySerializer(after_SharedKey_list,many=True)
     return Response(serializer.data)
   else:
     return Response(status=status.HTTP_401_UNAUTHORIZED)
-  
 
+#TODO implement cleaner code if possible
+
+
+  
+@api_view(['POST'])
+def update_shareKey_timelimit(request):
+  if(request.auth):
+    sharedKey=request.data['unique_sharekey']
+    timelimit=request.data["time_limit"]
+    sharedKey_list=SharedKey.objects.filter(unique_shared_key=sharedKey)
+    if(sharedKey_list.exists()):
+      sharedKey_list.update(time_till_expiration=int(timelimit))
+      return Response(status=status.HTTP_200_OK)
+    else:
+      return Response(status=status.HTTP_404_NOT_FOUND)
+  else:
+    return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 
 
