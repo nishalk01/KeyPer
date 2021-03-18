@@ -1,6 +1,6 @@
 import React,{useEffect,useState} from 'react'
 import {Paragraph,Title,Card,TouchableRipple,Button,Divider} from 'react-native-paper';
-import {Alert, View,Modal,Text} from 'react-native';
+import {Alert, View,Modal,Text,Image} from 'react-native';
 import NumericInput from 'react-native-numeric-input'
 import axios from 'axios';
 import { baseURL } from '../axios_inst';
@@ -10,6 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 function SharedKeyPage() {
   const [keys,setKey]=useState([]);
   const [showUpdate,setShowUpdate]=useState(false);
+  const [timeLimit,setTimeLimit]=useState(5);
   useEffect(() => {
     AsyncStorage.getItem("auth_token").then(auth_token=>{
       axios.get(baseURL+"api/get_sharekeys/",{
@@ -40,7 +41,21 @@ function SharedKeyPage() {
           {
             text: 'OK',
             onPress: () => {
-              // TODO make a axios request to delete the key
+              AsyncStorage.getItem("auth_token").then(auth_token=>{
+                axios.post(baseURL+"api/make_shared_key_invalid/",{
+                  "unique_to_check":sharedkey
+                },{
+                  headers: {
+                    'Authorization': `token ${auth_token}`
+                  }
+
+                }).then(res=>{
+                  console.log(res)
+                })
+                .catch(err=>{
+                  console.log(err)
+                })
+              })
               const newList = keys.filter((item) => item.unique_shared_key !== sharedkey);
               setKey(newList);
             }
@@ -51,6 +66,27 @@ function SharedKeyPage() {
 
   const update_modal=()=>{
     setShowUpdate(!showUpdate)
+  }
+
+  const changeTimeLimit=(sharedkey)=>{
+    AsyncStorage.getItem("auth_token").then(auth_token=>{
+      axios.post(baseURL+"api/update_sharekey_time/",{
+        "unique_sharekey":sharedkey,
+        "time_limit":timeLimit
+      },{
+        headers: {
+          'Authorization': `token ${auth_token}`
+        }
+      }).then(res=>{
+        Alert.alert("Changed time limit to " +String(timeLimit)+" minutes sucessfully")
+      })
+      .catch(err=>{
+        console.log(err)
+
+      })
+
+    })
+    
   }
   
 
@@ -77,10 +113,10 @@ function SharedKeyPage() {
        <Paragraph style={{ marginTop:"8%" }}>Change SharedKey time Limit by setting the NumericInput</Paragraph>
        
      <NumericInput 
-      value={2} 
+      value={timeLimit} 
       minValue={5}
       maxValue={60}
-      onChange={value => console.log(value)} 
+      onChange={value => setTimeLimit(value)} 
       onLimitReached={(isMax,msg) => console.log(isMax,msg)}
       totalWidth={100} 
       totalHeight={50} 
@@ -94,7 +130,7 @@ function SharedKeyPage() {
       leftButtonBackgroundColor='#E56B70'/>
      <View style={{ flexDirection:"row",marginTop:"10%" }}>
      <Button mode="contained" color="red" onPress={()=>setShowUpdate(false)} >CANCEL</Button>
-     <Button mode="contained" style={{ marginLeft:"10%" }} onPress={()=>console.log("hello")} >CHANGE</Button>
+     <Button mode="contained" style={{ marginLeft:"10%" }} onPress={()=>changeTimeLimit(key.unique_shared_key)} >CHANGE</Button>
      </View>
       </View>)
      
@@ -114,6 +150,7 @@ function SharedKeyPage() {
         <Title  style={styles.cardCenter}>ALTER SHARED KEY{'\n'}</Title>
         <Button  mode="outlined" onPress={()=>{update_modal()}}>UPDATE</Button>
         <Paragraph>Delete shared key here {"\n"}</Paragraph>
+       
      {SharedKeyList}
      
       </Card.Content>
@@ -122,3 +159,7 @@ function SharedKeyPage() {
 }
          
 export default SharedKeyPage
+
+
+
+

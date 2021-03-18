@@ -1,18 +1,22 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import React,{useState} from 'react';
-import { StyleSheet, Alert,Text,View } from 'react-native';
+import { StyleSheet, Alert,Text,View,Image } from 'react-native';
 import {baseURL} from '../axios_inst';
 import { Button, Divider,Card, Title, Paragraph,Provider,Portal,Modal,TextInput,TouchableRipple } from 'react-native-paper';
 import NumericInput from 'react-native-numeric-input'
 function HomePage({ navigation }) {
   const [visible, setVisible] = useState(false);
+  const [showSucess,setShowSucess]=useState(false);
+  const [delUseKey,setDelUserKey]=useState(false);
+
   const [email,setEmail]=useState(null);
   const [timeLimit, setTimeLimit] = useState(null);
 
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
   const containerStyle = {backgroundColor: 'white', padding: 20};
+  const sucessModal={ backgroundColor:"gray" }
 
   const handleCreateUserKey=()=>{
   AsyncStorage.getItem("auth_token").then(
@@ -23,7 +27,9 @@ function HomePage({ navigation }) {
       }
     }).then(
       res=>{
-        console.log(res)
+        console.log(res.status)
+        setShowSucess(true)
+
       }
     )
     .catch(err=>{
@@ -74,9 +80,13 @@ function HomePage({ navigation }) {
       })
       .then(res=>{
         console.log(res.status);
+        setDelUserKey(true)
       })
       .catch(err=>{
         console.log(err)
+        Alert.alert(  
+          'UserKey not found',  
+      );
       })
     })
   }
@@ -112,6 +122,32 @@ function HomePage({ navigation }) {
             leftButtonBackgroundColor='#E56B70'/>
         <Button style={styles.cardCenter} onPress={CreateShareKey}>Doe</Button>
         </Modal>
+        {/* sucessModal for suc */}
+        <Modal visible={showSucess} onDismiss={()=>setShowSucess(false)}  contentContainerStyle={sucessModal}>
+        <Image   style={{
+  height: "70%",
+  width: "100%",
+ 
+  }}
+        source={require('../assets/done.gif') } />
+        <Paragraph style={{ alignSelf:"center"  }}>Sucessfully generated UserKey</Paragraph>
+        <Button mode="contained" style={{ alignSelf:"flex-end" }} onPress={()=>setShowSucess(false)} >OK</Button>
+        </Modal>
+    {/* deleted userKey  */}
+    <Modal visible={delUseKey} onDismiss={()=>setDelUserKey(false)}  contentContainerStyle={sucessModal}>
+        <Image   style={{
+  height: "70%",
+  width: "100%",
+ 
+  }}
+        source={require('../assets/del_1.gif') } />
+        <Paragraph style={{ alignSelf:"center"  }}>Sucessfully deleted UserKey</Paragraph>
+        <Button mode="contained" style={{ alignSelf:"flex-end" }} onPress={()=>setDelUserKey(false)} >OK</Button>
+        </Modal>
+
+
+
+
       </Portal>
     
 

@@ -69,7 +69,7 @@ def create_share_key(request):
       account_obj_from_usr=Account.objects.get(id=usr_id)
       SharedKey_filter=SharedKey.objects.filter(from_user=account_obj_from_usr,to=account_obj_to_usr)
       if(SharedKey_filter.exists()):
-        SharedKey_filter.update(unique_shared_key=uuid.uuid4(),time_till_expiration=int(time_limit))
+        SharedKey_filter.update(unique_shared_key=uuid.uuid4(),time_till_expiration=int(time_limit),valid=True)
       else:
         SharedKey.objects.create(from_user=account_obj_from_usr,to=account_obj_to_usr,time_till_expiration=int(time_limit))
     except Exception as E:
@@ -111,6 +111,8 @@ def make_shared_key_invalid(request):
     shared_key=SharedKey.objects.filter(unique_shared_key=shared_key)
     shared_key.update(valid=False)
     return Response(status=status.HTTP_200_OK)
+  else:
+    return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 
 @api_view(['GET'])
@@ -139,7 +141,9 @@ def update_shareKey_timelimit(request):
   if(request.auth):
     sharedKey=request.data['unique_sharekey']
     timelimit=request.data["time_limit"]
+    print(sharedKey)
     sharedKey_list=SharedKey.objects.filter(unique_shared_key=sharedKey)
+    print(sharedKey_list)
     if(sharedKey_list.exists()):
       sharedKey_list.update(time_till_expiration=int(timelimit))
       return Response(status=status.HTTP_200_OK)
