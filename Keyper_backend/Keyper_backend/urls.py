@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^dj-rest-auth/registration/account-confirm-email/(?P<key>.+)/$', confirm_email, name='account_confirm_email'),
     path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls')),
     path('api/',include("otp_logic.api.urls")),
+    path('api_profile/',include("profile_logic.api.urls")),
     
 
 ]

@@ -3,6 +3,7 @@ import requests
 
 headers = {'Authorization': 'Token 921866a4e16365c99ed5a4ab34a9cc64967de361'}
 url_="http://192.168.0.108:8000/api/"
+url_p="http://192.168.0.108:8000/api_profile/"
 def get_user_key():
     url = url_+'key/'
     r = requests.get(url, headers=headers)
@@ -40,4 +41,11 @@ def update_time_limit():
     r=requests.post(url,headers=headers,data=my_obj)
     print(r)
 
-get_shared_keys()
+
+
+def get_user_details():
+    url=url_p+"user_details/"
+    r=requests.get(url,headers=headers)
+    print(r.json())
+
+get_user_details()

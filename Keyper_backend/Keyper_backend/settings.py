@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'dj_rest_auth',
     'account_model',
     'otp_logic',
+    'profile_logic',
 
 ]
 
