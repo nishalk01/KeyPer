@@ -22,6 +22,7 @@ from allauth.account.views import confirm_email
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('chat/', include('tracking_logic.urls')),
     path('accounts/', include('allauth.urls')),
     path('dj-rest-auth/', include('dj_rest_auth.urls')),
     url(r'^dj-rest-auth/registration/account-confirm-email/(?P<key>.+)/$', confirm_email, name='account_confirm_email'),

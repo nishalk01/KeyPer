@@ -2,9 +2,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import React,{useState} from 'react';
 import { StyleSheet, Alert,Text,View,Image } from 'react-native';
-import {baseURL} from '../axios_inst';
-import { Button, Divider,Card, Title, Paragraph,Provider,Portal,Modal,TextInput,TouchableRipple } from 'react-native-paper';
+import { Button, Divider,Card, Title, Paragraph,Provider,Portal,Modal,TextInput,TouchableRipple,Avatar } from 'react-native-paper';
 import NumericInput from 'react-native-numeric-input'
+import {baseURL} from '../axios_inst';
+
+
+
+
+
 function HomePage({ navigation }) {
   const [visible, setVisible] = useState(false);
   const [showSucess,setShowSucess]=useState(false);
@@ -90,7 +95,13 @@ function HomePage({ navigation }) {
       })
     })
   }
-   
+    
+
+  const Image_avatar=()=>{
+    return(
+      <Avatar.Text  label="N" size={150} />
+    )
+  }
    
     return (
       <Provider>
@@ -181,6 +192,19 @@ function HomePage({ navigation }) {
           </Button> */}
       </Card.Content>
       </TouchableRipple>
+    </Card>
+    
+
+<Divider style={{marginBottom:"5%"}}/>
+    <Card >
+    
+      <Card.Content >
+        <Title  style={styles.cardCenter}>LIVE LOCATION TRACKING{'\n'}</Title>
+        <Paragraph style={styles.cardCenter}>This tracks your current location of ESB just in case of Emergency</Paragraph>
+        <Button icon="map"  style={styles.cardCenter} color="blue" mode="contained" onPress={()=>{navigation.navigate("MapPage")}}>
+           SHOW LOCATION IN MAP
+          </Button>
+      </Card.Content>
     </Card>
     
      </View>

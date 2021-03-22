@@ -25,6 +25,8 @@ import HomePage from './src/screens/HomePage';
 import AppBar from './src/components/AppBar';
 import Profile from './src/screens/Profile';
 import  SharedKeyPage from "./src/screens/SharedKeyPage";
+import SplashScreen from './src/screens/SplashScreen';
+import MapPage from './src/screens/MapPage'
 
 import { navigationRef,navigate } from './src/RootNavigation';
 
@@ -88,12 +90,14 @@ const MainApp=()=>{
   return (
     <PaperProvider  theme={CombinedDefaultTheme}>
     <NavigationContainer ref={navigationRef} > 
-       <Stack.Navigator initialRouteName="Login">
+       <Stack.Navigator initialRouteName="SplashScreen">
+       <Stack.Screen name="SplashScreen" options={{ headerShown:false }} component={SplashScreen}/>
        <Stack.Screen name="MainApp" options={{ headerShown:false }} component={MainApp}/>
       <Stack.Screen name="Login"  options={{ headerShown:false}} component={LoginScreen}/>
       <Stack.Screen name="Register" options={{ headerShown:false }} component={RegisterScreen}/>
       <Stack.Screen name="ForgotPassword" options={{ headerShown:false }} component={ForgotPasswordScreen}/>
       <Stack.Screen name="SharedKey" options={{ headerShown:false }} component={SharedKeyPage}/>
+      <Stack.Screen name="MapPage" options={{ headerShown:true }} component={MapPage}/>
       </Stack.Navigator>
     </NavigationContainer>
     </PaperProvider>

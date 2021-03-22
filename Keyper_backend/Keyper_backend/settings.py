@@ -46,9 +46,11 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'dj_rest_auth.registration',
     'dj_rest_auth',
+    'channels',
     'account_model',
     'otp_logic',
     'profile_logic',
+    'tracking_logic',
 
 ]
 
@@ -71,7 +73,7 @@ ROOT_URLCONF = 'Keyper_backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -85,6 +87,16 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'Keyper_backend.wsgi.application'
+ASGI_APPLICATION = 'Keyper_backend.asgi.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
+
 AUTH_USER_MODEL = "account_model.Account"
 
 
